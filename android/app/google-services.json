@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "202675725142",
+    "project_id": "sharephoto-2024",
+    "storage_bucket": "sharephoto-2024.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:202675725142:android:023d8c9215d2f9d4ca2cf7",
+        "android_client_info": {
+          "package_name": "com.example.photoapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdaNfA3vUy9o63NikU-ZJmTRZVx-gAkOU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
