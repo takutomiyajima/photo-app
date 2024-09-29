@@ -46,6 +46,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '202675725142',
     projectId: 'sharephoto-2024',
     authDomain: 'sharephoto-2024.firebaseapp.com',
+    databaseURL: 'https://sharephoto-2024-default-rtdb.firebaseio.com',
     storageBucket: 'sharephoto-2024.appspot.com',
     measurementId: 'G-5BKHSF1VXP',
   );
@@ -55,6 +56,7 @@ class DefaultFirebaseOptions {
     appId: '1:202675725142:android:023d8c9215d2f9d4ca2cf7',
     messagingSenderId: '202675725142',
     projectId: 'sharephoto-2024',
+    databaseURL: 'https://sharephoto-2024-default-rtdb.firebaseio.com',
     storageBucket: 'sharephoto-2024.appspot.com',
   );
 
@@ -63,6 +65,7 @@ class DefaultFirebaseOptions {
     appId: '1:202675725142:ios:8ed399a6dccf6ac3ca2cf7',
     messagingSenderId: '202675725142',
     projectId: 'sharephoto-2024',
+    databaseURL: 'https://sharephoto-2024-default-rtdb.firebaseio.com',
     storageBucket: 'sharephoto-2024.appspot.com',
     iosBundleId: 'com.example.photoapp',
   );
@@ -72,6 +75,7 @@ class DefaultFirebaseOptions {
     appId: '1:202675725142:ios:8ed399a6dccf6ac3ca2cf7',
     messagingSenderId: '202675725142',
     projectId: 'sharephoto-2024',
+    databaseURL: 'https://sharephoto-2024-default-rtdb.firebaseio.com',
     storageBucket: 'sharephoto-2024.appspot.com',
     iosBundleId: 'com.example.photoapp',
   );
@@ -82,7 +86,9 @@ class DefaultFirebaseOptions {
     messagingSenderId: '202675725142',
     projectId: 'sharephoto-2024',
     authDomain: 'sharephoto-2024.firebaseapp.com',
+    databaseURL: 'https://sharephoto-2024-default-rtdb.firebaseio.com',
     storageBucket: 'sharephoto-2024.appspot.com',
     measurementId: 'G-Q4CYCG73M9',
   );
+
 }
