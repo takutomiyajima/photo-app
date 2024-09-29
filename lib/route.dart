@@ -3,10 +3,12 @@ import 'package:go_router/go_router.dart';
 import 'package:photoapp/screen/home.dart';
 import 'package:photoapp/infla/bottom-bar.dart';
 import 'package:photoapp/screen/setting.dart';
+import 'package:photoapp/screen/post.dart';
 
 final rootNavigatorKey = GlobalKey<NavigatorState>();
 final homeNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'home');
 final settingNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'setting');
+final PostNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'post');
 
 class App extends StatelessWidget{
   App({super.key});
@@ -36,6 +38,15 @@ final appRouter = GoRouter(
             GoRoute(
               path: '/settings',
               builder: (context, state) => Setting(),
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          navigatorKey: PostNavigatorKey,
+          routes: [
+            GoRoute(
+              path: '/post',
+              builder: (context, state) => const PostScreen(),
             ),
           ],
         ),

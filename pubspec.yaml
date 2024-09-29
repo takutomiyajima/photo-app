@@ -42,6 +42,7 @@ dependencies:
   firebase_auth: ^4.16.0
   get_server: ^1.2.1
   go_router: ^14.2.7
+  firebase_database: ^10.5.7
 
 dev_dependencies:
   flutter_test:

@@ -18,6 +18,7 @@ class AppNavigationBar extends StatelessWidget {
         destinations: const [
           NavigationDestination(icon: Icon(Icons.home), label: 'home'),
           NavigationDestination(icon: Icon(Icons.settings), label: 'setting'),
+          NavigationDestination(icon: Icon(Icons.add_a_photo), label: 'post'),
         ],
         onDestinationSelected: (index) {
           navigationShell.goBranch(
