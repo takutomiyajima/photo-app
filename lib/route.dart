@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:photoapp/screen/home.dart';
-import 'package:photoapp/infla/bottom-bar.dart';
+import 'package:photoapp/component/bottom-bar.dart';
+import 'package:photoapp/screen/login.dart';
 import 'package:photoapp/screen/setting.dart';
 import 'package:photoapp/screen/post.dart';
 
@@ -28,7 +30,10 @@ final appRouter = GoRouter(
           routes: [
             GoRoute(
               path: '/home',
-              builder: (context, state) => const Home(),
+              builder: (context, state) {
+                final user = state.extra as User; // extraからUserオブジェクトを取り出す
+                return Home(user); // Homeに直接渡す
+              },
             ),
           ],
         ),
@@ -37,7 +42,7 @@ final appRouter = GoRouter(
           routes: [
             GoRoute(
               path: '/settings',
-              builder: (context, state) => Setting(),
+              builder: (context, state) => LoginPage(),
             ),
           ],
         ),
@@ -46,7 +51,7 @@ final appRouter = GoRouter(
           routes: [
             GoRoute(
               path: '/post',
-              builder: (context, state) => const PostScreen(),
+              builder: (context, state) => PostScreen(),
             ),
           ],
         ),
