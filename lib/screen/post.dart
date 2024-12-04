@@ -8,7 +8,7 @@ import '../firebase_options.dart';
 import 'dart:io';
 
 class PostScreen extends StatefulWidget{
-  const PostScreen({super.key});
+  PostScreen();
   @override
   _PostScreenState createState() => _PostScreenState();
 }
@@ -22,10 +22,6 @@ class _PostScreenState extends State<PostScreen>{
   FirebaseDatabase database = FirebaseDatabase.instance;
 
   @override
-    void dispose() {
-    _nameController.dispose();
-    super.dispose();
-    }
 
   Future<void> _pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
@@ -57,7 +53,7 @@ class _PostScreenState extends State<PostScreen>{
 
       // Firebase Firestoreにデータを登録
       if (imageUrl != null) {
-        final ref = FirebaseDatabase.instance.ref('users');
+        final ref = FirebaseDatabase.instance.ref('posts');
         // Firestoreにデータを登録
         await ref.set({
           'name': name,
