@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class Setting extends StatelessWidget {
+class Flame extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text('data'),
+      body:Container(
+        
       ),
     );
   }

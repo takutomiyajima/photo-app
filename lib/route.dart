@@ -6,6 +6,7 @@ import 'package:photoapp/component/bottom-bar.dart';
 import 'package:photoapp/screen/login.dart';
 import 'package:photoapp/screen/setting.dart';
 import 'package:photoapp/screen/post.dart';
+import 'package:photoapp/screen/usermodel.dart';
 
 final rootNavigatorKey = GlobalKey<NavigatorState>();
 final homeNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'home');
@@ -17,7 +18,7 @@ class App extends StatelessWidget{
   
 final appRouter = GoRouter(
   navigatorKey: rootNavigatorKey,
-  initialLocation: '/home',
+  initialLocation: '/settings',
   routes: [
     StatefulShellRoute.indexedStack(
       parentNavigatorKey: rootNavigatorKey,
@@ -31,8 +32,11 @@ final appRouter = GoRouter(
             GoRoute(
               path: '/home',
               builder: (context, state) {
-                final user = state.extra as User; // extraからUserオブジェクトを取り出す
-                return Home(user); // Homeに直接渡す
+                final userModel = state.extra as Usermodel?;
+                if (userModel == null) {
+                  return Text('ユーザーデータが見つかりません');
+                }
+                return Home(userModel: userModel);
               },
             ),
           ],
