@@ -45,32 +45,47 @@ class _PostScreenState extends State<PostScreen>{
   }
 
   void _submitData() async {
-    if (_formKey.currentState!.validate()) {
-      String name = _nameController.text;
-      String detail = _detailController.text;
+  if (_formKey.currentState!.validate()) {
+    String name = _nameController.text;
+    String detail = _detailController.text;
 
-      String? imageUrl = await _uploadImage(_selectedImage!);
+    if (_selectedImage == null) {
+      print("画像を選択してください");
+      return;
+    }
 
-      // Firebase Firestoreにデータを登録
-      if (imageUrl != null) {
-        final ref = FirebaseDatabase.instance.ref('posts');
-        // Firestoreにデータを登録
-        await ref.set({
-          'name': name,
-          'detail': detail,
-          'imageUrl': imageUrl,
-          'timestamp': ServerValue.timestamp,
-        });
+    String? imageUrl = await _uploadImage(_selectedImage!);
 
-      // 登録後にフォームをリセット
+    if (imageUrl == null) {
+      print("画像のアップロードに失敗しました");
+      return;
+    }
+
+    try {
+      // Firestore にデータを保存
+      await FirebaseFirestore.instance.collection('posts').add({
+        'name': name,
+        'detail': detail,
+        'imageUrl': imageUrl,
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+
+      // フォームをリセット
       _nameController.clear();
       _detailController.clear();
       setState(() {
-          _selectedImage = null;
-        });
+        _selectedImage = null;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('投稿が完了しました'))
+      );
+    } catch (e) {
+      print("データの保存に失敗しました: $e");
     }
   }
-    }
+}
+
   
   @override
   Widget build(BuildContext context) {

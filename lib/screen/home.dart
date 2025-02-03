@@ -1,33 +1,41 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'dart:io';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:photoapp/component/bottom-bar.dart';
 import 'package:photoapp/screen/usermodel.dart';
+import 'package:photoapp/core/auth_provider.dart';
 
-
-class Home extends StatelessWidget {
+class Home extends ConsumerWidget {
   final Usermodel userModel;
-  Home({required this.userModel});
+
+  Home({Key? key, required this.userModel}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    DatabaseReference ref = FirebaseDatabase.instance.ref("users/${userModel.uid}");
-    
-    return MaterialApp(
-      home:Scaffold(
+  Widget build(BuildContext context, WidgetRef ref) {
+    DatabaseReference userRef = FirebaseDatabase.instance.ref("users/${userModel.uid}");
+
+    return Scaffold(
       backgroundColor: Colors.grey,
       body: Center(
+        child: Container(
+          padding: EdgeInsets.all(60),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-                Text('ユーザー名: ${userModel.name ?? "未設定"}'),
-                Text('UID: ${userModel.uid}'),
-                Text('メールアドレス: ${userModel.user.email ?? "不明"}'),
-              ],
-            )
-          ,),
-        )
-      );
+              Text('ユーザー名: ${userModel.name ?? "未設定"}'),
+              Text('UID: ${userModel.uid}'),
+              Text('メールアドレス: ${userModel.user.email ?? "不明"}'), // 修正
+              ElevatedButton(
+                child: Text("Logout"),
+                onPressed: () {
+                  ref.read(authProvider.notifier).signOut(); // 修正
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

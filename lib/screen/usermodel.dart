@@ -10,4 +10,12 @@ class Usermodel {
     required this.uid,
     this.name,
   });
+
+  factory Usermodel.fromFirebase(User user) {
+    return Usermodel(
+      uid: user.uid,
+      name: user.displayName,
+      user: user,
+    );
+  }
 }
