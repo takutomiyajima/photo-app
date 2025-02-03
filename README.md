@@ -1,6 +1,8 @@
 # photoapp
 
 A new Flutter project.
+写真をアップロードしてそれを見ることができるようにするアプリです。
+現在、制作を進めております
 
 ## Getting Started
 
