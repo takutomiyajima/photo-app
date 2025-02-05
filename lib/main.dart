@@ -21,31 +21,14 @@ void main() async {
   }
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: AuthCheck(),
-    );
-  }
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(routerProvider);
 
-class AuthCheck extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator()); // ローディング中
-        }
-        if (snapshot.hasData) {
-          final userModel = Usermodel.fromFirebase(snapshot.data!);
-          return Home(userModel: userModel,); // ログイン済みならホームへ
-        }
-        return LoginPage(); // 未ログインならログインページへ
-      },
+    return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      routerConfig: router, // GoRouter を適用
     );
   }
 }
