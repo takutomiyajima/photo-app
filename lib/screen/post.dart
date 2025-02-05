@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:photoapp/core/post_provider.dart';
+import 'package:photoapp/model/postmodel.dart';
 import 'package:uuid/uuid.dart';
 import '../firebase_options.dart';
 import 'dart:io';

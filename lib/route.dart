@@ -8,7 +8,7 @@ import 'package:photoapp/screen/login.dart';
 import 'package:photoapp/screen/setting.dart';
 import 'package:photoapp/screen/post.dart';
 import 'package:photoapp/core/auth_provider.dart';
-import 'package:photoapp/screen/usermodel.dart';
+import 'package:photoapp/model/usermodel.dart';
 
 // ナビゲーション用のキー
 final rootNavigatorKey = GlobalKey<NavigatorState>();

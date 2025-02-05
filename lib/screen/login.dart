@@ -8,7 +8,7 @@ import 'package:photoapp/screen/home.dart';
 import 'package:photoapp/screen/post.dart';
 import 'package:photoapp/core/provider.dart';
 import 'package:photoapp/main.dart';
-import 'package:photoapp/screen/usermodel.dart';
+import 'package:photoapp/model/usermodel.dart';
 
 class LoginPage extends StatelessWidget {
   @override
