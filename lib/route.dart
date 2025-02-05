@@ -7,8 +7,8 @@ import 'package:photoapp/component/bottom-bar.dart';
 import 'package:photoapp/screen/login.dart';
 import 'package:photoapp/screen/setting.dart';
 import 'package:photoapp/screen/post.dart';
-import 'package:photoapp/screen/usermodel.dart';
 import 'package:photoapp/core/auth_provider.dart';
+import 'package:photoapp/screen/usermodel.dart';
 
 // ナビゲーション用のキー
 final rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -31,6 +31,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       if (!isLoggedIn) {
         return isLoggingIn ? null : '/login';
       }
+
       return isLoggingIn ? '/home' : null;
     },
     routes: [
@@ -50,13 +51,18 @@ final routerProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: '/home',
                 builder: (context, state) {
-                  final userModel = state.extra as Usermodel?;
-                  if (userModel == null) {
-                    return Scaffold(
-                      body: Center(child: Text('ユーザーデータが見つかりません')),
-                    );
-                  }
-                  return Home(userModel: userModel);
+                  return Consumer(
+                    builder: (context, ref, child) {
+                      final authUser = ref.watch(authProvider);
+                      if (authUser == null) {
+                        return Scaffold(
+                          body: Center(child: Text('ユーザー情報が取得できません')),
+                        );
+                      }
+                      final userModel = Usermodel.fromFirebase(authUser);
+                      return Home(userModel: userModel);
+                    },
+                  );
                 },
               ),
             ],
@@ -66,7 +72,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: '/settings',
-                builder: (context, state) => LoginPage(),
+                builder: (context, state) => Setting(),
               ),
             ],
           ),

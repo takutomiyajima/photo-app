@@ -7,6 +7,8 @@ final authProvider = StateNotifierProvider<AuthNotifier, User?>((ref) {
   return AuthNotifier();
 });
 
+final authDetailProvider = Provider<FirebaseAuth>((ref) => FirebaseAuth.instance);
+
 // 認証状態を管理するStateNotifier
 class AuthNotifier extends StateNotifier<User?> {
   AuthNotifier() : super(FirebaseAuth.instance.currentUser) {
@@ -33,12 +35,12 @@ class AuthNotifier extends StateNotifier<User?> {
 
 // GoRouterのリフレッシュ用にChangeNotifierを作成
 class AuthListenable extends ChangeNotifier {
-  AuthListenable(WidgetRef ref) {
+  AuthListenable(Ref ref) {
     ref.listen(authProvider, (_, __) => notifyListeners());
   }
 }
 
 // AuthListenableを提供するプロバイダー
-final authListenableProvider = Provider<AuthListenable>((ref) {
-  return AuthListenable(ref as WidgetRef);
+final authListenableProvider = ChangeNotifierProvider<AuthListenable>((ref) {
+  return AuthListenable(ref); // ChangeNotifierProviderRef から渡される
 });
