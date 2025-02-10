@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:photoapp/component/bottom-bar.dart';
-import 'package:photoapp/screen/usermodel.dart';
+import 'package:photoapp/model/usermodel.dart';
 import 'package:photoapp/core/auth_provider.dart';
 
 class Home extends ConsumerWidget {
@@ -16,6 +16,9 @@ class Home extends ConsumerWidget {
     DatabaseReference userRef = FirebaseDatabase.instance.ref("users/${userModel.uid}");
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Home"),
+      ),
       backgroundColor: Colors.grey,
       body: Center(
         child: Container(

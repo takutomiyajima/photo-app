@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:photoapp/route.dart';
 import 'package:photoapp/screen/home.dart';
 import 'package:photoapp/screen/login.dart';
-import 'package:photoapp/screen/usermodel.dart';
+import 'package:photoapp/model/usermodel.dart';
 import 'firebase_options.dart';
 
 
