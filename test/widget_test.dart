@@ -8,8 +8,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:photoapp/main.dart';
-import 'package:photoapp/screen/home.dart';
 import 'package:photoapp/screen/login.dart';
 
 void main() {

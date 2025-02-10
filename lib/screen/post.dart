@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:photoapp/component/subtitle.dart';
 import 'package:photoapp/core/post_provider.dart';
 import 'package:photoapp/model/postmodel.dart';
 import 'package:uuid/uuid.dart';
@@ -90,7 +91,8 @@ class PostScreen extends ConsumerWidget {
           padding: EdgeInsets.all(5),
           child: Column(
             children: [
-              Text('post'),
+              SizedBox(height: 20,),
+              Subtitle("Detail"),
               Form(
                 child: Column(
                   children: [
@@ -103,7 +105,8 @@ class PostScreen extends ConsumerWidget {
                       decoration: InputDecoration(labelText: 'キャプションを入力'),
                       onChanged: (value) => ref.read(postFormProvider.notifier).updateDetail(value),
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 50),
+                    Subtitle("Images"),
                     postState.image != null
                         ? Image.file(
                             postState.image!,

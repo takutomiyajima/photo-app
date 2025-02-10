@@ -16,6 +16,9 @@ class Home extends ConsumerWidget {
     DatabaseReference userRef = FirebaseDatabase.instance.ref("users/${userModel.uid}");
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Home"),
+      ),
       backgroundColor: Colors.grey,
       body: Center(
         child: Container(

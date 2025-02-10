@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:photoapp/screen/home.dart';
 import 'package:photoapp/screen/post.dart';
-import 'package:photoapp/core/provider.dart';
+import 'package:photoapp/core/info_provider.dart';
 import 'package:photoapp/main.dart';
 import 'package:photoapp/model/usermodel.dart';
 
