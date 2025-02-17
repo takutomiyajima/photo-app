@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -21,7 +20,6 @@ class Setting extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Size screenSize = MediaQuery.of(context).size;
-    final height = screenSize.height;
     final width = screenSize.width;
     final user = ref.watch(userinfoProvider);
     final profileImageUrl = ref.watch(profileImageProvider);

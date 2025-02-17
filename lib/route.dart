@@ -59,8 +59,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                           body: Center(child: Text('ユーザー情報が取得できません')),
                         );
                       }
-                      final userModel = Usermodel.fromFirebase(authUser);
-                      return Home(userModel: userModel);
+                      return Home();
                     },
                   );
                 },

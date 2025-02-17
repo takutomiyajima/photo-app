@@ -1,44 +1,53 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:photoapp/component/bottom-bar.dart';
-import 'package:photoapp/model/usermodel.dart';
-import 'package:photoapp/core/auth_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:photoapp/core/post_provider.dart';
+import 'package:photoapp/core/info_provider.dart';
+import 'package:photoapp/screen/flame.dart';
 
 class Home extends ConsumerWidget {
-  final Usermodel userModel;
-
-  Home({Key? key, required this.userModel}) : super(key: key);
+  const Home({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    DatabaseReference userRef = FirebaseDatabase.instance.ref("users/${userModel.uid}");
+    final userInfo = ref.watch(userinfoProvider);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Home"),
-      ),
-      backgroundColor: Colors.grey,
-      body: Center(
-        child: Container(
-          padding: EdgeInsets.all(60),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('ユーザー名: ${userModel.name ?? "未設定"}'),
-              Text('UID: ${userModel.uid}'),
-              Text('メールアドレス: ${userModel.user.email ?? "不明"}'), // 修正
-              ElevatedButton(
-                child: Text("Logout"),
-                onPressed: () {
-                  ref.read(authProvider.notifier).signOut(); // 修正
-                },
-              ),
-            ],
+    return userInfo.when(
+      data: (user) {
+        if (user == null) {
+          return const Scaffold(
+            body: Center(child: Text('ユーザーがログインしていません')),
+          );
+        }
+
+        final postListAsync = ref.watch(postListProvider(user.uid));
+
+        return Scaffold(
+          appBar: AppBar(title: const Text('User Posts')),
+          body: postListAsync.when(
+            data: (posts) {
+              return posts.isEmpty
+                  ? const Center(child: Text('No posts found'))
+                  : GridView.builder(
+                      itemCount: posts.length,
+                      itemBuilder: (context, index) {
+                        final post = posts[index];
+                        return Flame(post);
+                      }, 
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,         
+                        crossAxisSpacing: 1,       
+                        mainAxisSpacing: 1,        
+                        childAspectRatio: 1.0,     
+                      ),
+                    );
+            },
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (error, stack) => Center(child: Text('Error: $error')),
           ),
-        ),
-      ),
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, stack) => Center(child: Text('Error: $error')),
     );
   }
 }
