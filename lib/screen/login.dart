@@ -1,13 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:photoapp/screen/home.dart';
-import 'package:photoapp/screen/post.dart';
 import 'package:photoapp/core/info_provider.dart';
-import 'package:photoapp/main.dart';
 import 'package:photoapp/model/usermodel.dart';
 
 class LoginPage extends StatelessWidget {

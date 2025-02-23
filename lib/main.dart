@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:photoapp/route.dart';
 import 'firebase_options.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 
 void main() async {
@@ -25,6 +26,9 @@ class MyApp extends ConsumerWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       routerConfig: router, 
+      theme: ThemeData(
+        textTheme: GoogleFonts.zenAntiqueTextTheme(),
+      ),
     );
   }
 }

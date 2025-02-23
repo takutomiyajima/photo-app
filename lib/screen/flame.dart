@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:photoapp/model/displaymodel.dart';
-import 'package:photoapp/model/postmodel.dart';
 
 class Flame extends ConsumerWidget {
   final Display post;
@@ -31,7 +30,7 @@ class Flame extends ConsumerWidget {
                   },
                 ),
               ),
-              Text(post.detail),
+              Text(post.name),
             ],
           ),
         ),

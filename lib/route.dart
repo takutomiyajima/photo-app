@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:photoapp/screen/home.dart';
@@ -8,9 +7,7 @@ import 'package:photoapp/screen/login.dart';
 import 'package:photoapp/screen/setting.dart';
 import 'package:photoapp/screen/post.dart';
 import 'package:photoapp/core/auth_provider.dart';
-import 'package:photoapp/model/usermodel.dart';
 
-// ナビゲーション用のキー
 final rootNavigatorKey = GlobalKey<NavigatorState>();
 final homeNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'home');
 final settingNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'setting');
