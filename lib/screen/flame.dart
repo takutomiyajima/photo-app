@@ -30,7 +30,7 @@ class Flame extends ConsumerWidget {
                   },
                 ),
               ),
-              Text(post.detail),
+              Text(post.name),
             ],
           ),
         ),

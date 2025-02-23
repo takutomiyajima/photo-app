@@ -27,7 +27,7 @@ class MyApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       routerConfig: router, 
       theme: ThemeData(
-        textTheme: GoogleFonts.kaiseiDecolTextTheme(),
+        textTheme: GoogleFonts.zenAntiqueTextTheme(),
       ),
     );
   }

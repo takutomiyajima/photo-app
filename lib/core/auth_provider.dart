@@ -2,14 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart'; 
 
-// Firebaseの認証状態を管理するプロバイダー
 final authProvider = StateNotifierProvider<AuthNotifier, User?>((ref) {
   return AuthNotifier();
 });
 
 final authDetailProvider = Provider<FirebaseAuth>((ref) => FirebaseAuth.instance);
 
-// 認証状態を管理するStateNotifier
 class AuthNotifier extends StateNotifier<User?> {
   AuthNotifier() : super(FirebaseAuth.instance.currentUser) {
     _authStateListener();
@@ -33,14 +31,12 @@ class AuthNotifier extends StateNotifier<User?> {
   }
 }
 
-// GoRouterのリフレッシュ用にChangeNotifierを作成
 class AuthListenable extends ChangeNotifier {
   AuthListenable(Ref ref) {
     ref.listen(authProvider, (_, __) => notifyListeners());
   }
 }
 
-// AuthListenableを提供するプロバイダー
 final authListenableProvider = ChangeNotifierProvider<AuthListenable>((ref) {
   return AuthListenable(ref); // ChangeNotifierProviderRef から渡される
 });

@@ -1,16 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:photoapp/component/subtitle.dart';
 import 'package:photoapp/core/post_provider.dart';
 import 'package:photoapp/model/postmodel.dart';
 import 'package:uuid/uuid.dart';
-import '../firebase_options.dart';
-import 'dart:io';
 
 class PostScreen extends ConsumerWidget {
 
@@ -47,6 +42,9 @@ class PostScreen extends ConsumerWidget {
     String? imageUrl = await ref.read(postFormProvider.notifier).uploadImage();
     if (imageUrl == null) {
       print("画像のアップロードに失敗しました");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('画像のアップロードに失敗しました')),
+      );
       return;
     }
 
@@ -86,6 +84,7 @@ class PostScreen extends ConsumerWidget {
         title: Text('Post'),
       ),
       body: Center(
+        child:SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.all(5),
           child: Column(
@@ -102,6 +101,8 @@ class PostScreen extends ConsumerWidget {
                     SizedBox(height: 20),
                     TextFormField(
                       decoration: InputDecoration(labelText: 'キャプションを入力'),
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
                       onChanged: (value) => ref.read(postFormProvider.notifier).updateDetail(value),
                     ),
                     SizedBox(height: 50),
@@ -128,7 +129,7 @@ class PostScreen extends ConsumerWidget {
             ],
           ),
         ),
-      ),
+      ),)
     );
   }
 }
