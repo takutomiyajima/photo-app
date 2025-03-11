@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:photoapp/core/auth_provider.dart';
 import 'package:photoapp/core/info_provider.dart';
 import 'package:photoapp/model/usermodel.dart';
 
@@ -25,6 +26,8 @@ class LoginPageDetail extends ConsumerWidget {
     final name = ref.watch(nameProvider);
     final password = ref.watch(passProvider);
     final info = ref.watch(infoProvider);
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
 
     return Center(
       child: Container(
@@ -78,29 +81,19 @@ class LoginPageDetail extends ConsumerWidget {
               child: Text('登録する'),
             ),
             OutlinedButton(
-              child: Text('ログイン'),
+              child: Text("ログイン"),
               onPressed: () async {
                 try {
-                  final auth = FirebaseAuth.instance;
-                  final result = await auth.signInWithEmailAndPassword(
-                    email: email,
-                    password: password,
-                  );
-                  
-                  final user = result.user!;
-                  final userModel = Usermodel(
-                    user: user,
-                    uid: user.uid,
-                    name: name,
-                  );
-                
-                  context.go('/home', extra: userModel);
+                  await ref.read(authProvider.notifier).signIn(email, password);
+                  final user = ref.read(authProvider); 
+                  if (user != null) {
+                    print("ログイン成功: ${user.uid}");//デバッグ用
+                  }
                 } catch (e) {
-                  ref.read(infoProvider.notifier).state =
-                      "ログインに失敗しました：${e.toString()}";
+                  print("ログインに失敗しました: $e");//デバッグ用
                 }
               },
-            ),
+            )
           ],
         ),
       ),

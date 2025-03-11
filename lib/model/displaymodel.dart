@@ -2,7 +2,7 @@ import 'package:photoapp/model/postmodel.dart';
 
 class Display {
   final String detail;
-  final String imageUrl; // 画像URL
+  final String imageUrl; 
   final String name;
   
   Display({
@@ -11,7 +11,6 @@ class Display {
     required this.name,
   });
 
-  // PostFormStateからDisplayに変換
   factory Display.fromPostFormState(PostFormState post) {
     return Display(
       detail: post.detail,
