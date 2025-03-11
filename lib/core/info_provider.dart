@@ -25,21 +25,28 @@ final nameProvider = StateProvider.autoDispose((ref) {
 });
 
 final userinfoProvider = FutureProvider<Usermodel?>((ref) async {
-  final auth = FirebaseAuth.instance;
-  final user = auth.currentUser;
-  if (user == null) return null;
+  try {
+    final auth = FirebaseAuth.instance;
+    final user = auth.currentUser;
+    if (user == null) return null;
 
-  final snapshot = await FirebaseDatabase.instance.ref("users/${user.uid}/name").get();
-  String? name;
-  if (snapshot.exists) {
-    name = snapshot.value as String?;
+    final snapshot = await FirebaseDatabase.instance.ref("users/${user.uid}/name").get();
+    String? name;
+    if (snapshot.exists) {
+      name = snapshot.value as String?;
+    }
+    
+    return Usermodel(
+      user: user,
+      uid: user.uid,
+      name: name ?? user.displayName, 
+    );
+  } catch (e) {
+    print("Error fetching user info: $e");
+    return null; 
   }
-  return Usermodel(
-    user: user,
-    uid: user.uid,
-    name: name ?? user.displayName, 
-  );
 });
+
 
 
 final profileImageProvider = NotifierProvider<ProfileImageNotifier, String?>(() {

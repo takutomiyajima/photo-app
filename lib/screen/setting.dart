@@ -21,113 +21,119 @@ class Setting extends ConsumerWidget {
   }
 
   @override
-Widget build(BuildContext context, WidgetRef ref) {
-  Size screenSize = MediaQuery.of(context).size;
-  final width = screenSize.width;
-  final userAsync = ref.watch(userinfoProvider); // `AsyncValue<UserModel?>` を取得
-  final profileImageUrl = ref.watch(profileImageProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    Size screenSize = MediaQuery.of(context).size;
+    final width = screenSize.width;
+    final userAsync = ref.watch(userinfoProvider); 
+    final profileImageUrl = ref.watch(profileImageProvider);
 
-  return Scaffold(
-    appBar: AppBar(
-      title: const Text('My Page'),
-    ),
-    body: SingleChildScrollView(
-    child: Center(
-      child: Column(
-        children: [
-          const SizedBox(height: 25),
-          const Subtitle("profile"),
-          const SizedBox(height: 30),
-          Container(
-            width: width,
-            margin: const EdgeInsets.all(10),
-            child: Row(
-              children: [
-                Container(
-                  width: width * 0.5,
-                  child: profileImageUrl != null
-                      ? CircleAvatar(
-                          radius: 50,
-                          backgroundImage: NetworkImage(profileImageUrl),
-                        )
-                      : const CircleAvatar(
-                          radius: 50,
-                          child: Icon(Icons.person, size: 50),
-                        ),
-                ),
-                Container(
-                  width: width * 0.4,
-                  child: userAsync.when(
-                    data: (userInfo) {
-                      if (userInfo != null) {
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("名前: ${userInfo.name ?? "未設定"}"),
-                            Text("UID: ${userInfo.uid}"),
-                          ],
-                        );
-                      } else {
-                        return const Text("ユーザー情報がありません");
-                      }
-                    },
-                    loading: () => const CircularProgressIndicator(),
-                    error: (error, stack) => Text("エラー: $error"),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () => _pickAndUploadImage(context, ref),
-            child: const Text("プロフィール画像を変更"),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              await ref.read(authProvider.notifier).signOut();
-            },
-            child: Text("ログアウト")
-          ),
-          const SizedBox(height: 25),
-          const Subtitle("my post"),
-
-          userAsync.when(
-            data: (userInfo) {
-              if (userInfo == null) {
-                return const Text("ユーザー情報がありません");
-              }
-              final postListAsync = ref.watch(postListProvider(userInfo.uid));
-
-              return postListAsync.when(
-                data: (posts) {
-                  return posts.isEmpty
-                      ? const Center(child: Text('No posts found'))
-                      : GridView.builder(
-                          shrinkWrap: true, 
-                          physics: const NeverScrollableScrollPhysics(), // ← 追加
-                          itemCount: posts.length,
-                          itemBuilder: (context, index) {
-                            final post = posts[index];
-                            return Flame(post);
-                          },
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            crossAxisSpacing: 2,
-                            mainAxisSpacing: 2,
-                            childAspectRatio: 1.0,
-                          ),
-                        );
-                },
-                loading: () => const Center(child: CircularProgressIndicator()),
-                error: (error, stack) => Center(child: Text('Error: $error')),
-              );
-            },
-            loading: () => const CircularProgressIndicator(),
-            error: (error, stack) => Center(child: Text('Error: $error')),
-          ),
-        ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('My Page'),
       ),
-    ),
-  ));
-}
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              const SizedBox(height: 25),
+              const Subtitle("profile"),
+              const SizedBox(height: 30),
+              Container(
+                width: width,
+                margin: const EdgeInsets.all(10),
+                child: Row(
+                  children: [
+                    // プロフィール画像
+                    Container(
+                      width: width * 0.5,
+                      child: profileImageUrl != null
+                          ? CircleAvatar(
+                              radius: 50,
+                              backgroundImage: NetworkImage(profileImageUrl),
+                            )
+                          : const CircleAvatar(
+                              radius: 50,
+                              child: Icon(Icons.person, size: 50),
+                            ),
+                    ),
+                    // ユーザー情報
+                    Container(
+                      width: width * 0.4,
+                      child: userAsync.when(
+                        data: (userInfo) {
+                          if (userInfo != null) {
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("名前: ${userInfo.name ?? "未設定"}"),
+                                Text("UID: ${userInfo.uid}"),
+                              ],
+                            );
+                          } else {
+                            return const Text("ユーザー情報がありません");
+                          }
+                        },
+                        loading: () => const CircularProgressIndicator(),
+                        error: (error, stack) => Text("エラー: $error"),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // プロフィール画像変更ボタン
+              ElevatedButton(
+                onPressed: () => _pickAndUploadImage(context, ref),
+                child: const Text("プロフィール画像を変更"),
+              ),
+              // ログアウトボタン
+              ElevatedButton(
+                onPressed: () async {
+                  await ref.read(authProvider.notifier).signOut();
+                },
+                child: const Text("ログアウト"),
+              ),
+              const SizedBox(height: 25),
+              const Subtitle("my post"),
+              // 投稿リスト
+              userAsync.when(
+                data: (userInfo) {
+                  if (userInfo == null) {
+                    return const Text("ユーザー情報がありません");
+                  }
+
+                  final postListAsync = ref.watch(postListProvider(userInfo.uid));
+
+                  return postListAsync.when(
+                    data: (posts) {
+                      return posts.isEmpty
+                          ? const Center(child: Text('No posts found'))
+                          : GridView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: posts.length,
+                              itemBuilder: (context, index) {
+                                final post = posts[index];
+                                return Flame(post);
+                              },
+                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                crossAxisSpacing: 2,
+                                mainAxisSpacing: 2,
+                                childAspectRatio: 1.0,
+                              ),
+                            );
+                    },
+                    loading: () => const Center(child: CircularProgressIndicator()),
+                    error: (error, stack) => Center(child: Text('Error: $error')),
+                  );
+                },
+                loading: () => const CircularProgressIndicator(),
+                error: (error, stack) => Center(child: Text('Error: $error')),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }

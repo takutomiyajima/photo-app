@@ -1,9 +1,9 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:photoapp/core/auth_provider.dart';
 import 'package:photoapp/model/displaymodel.dart';
 import 'package:photoapp/model/postmodel.dart';
 import 'package:image/image.dart' as img;
@@ -33,11 +33,17 @@ class PostFormNotifier extends StateNotifier<PostFormState> {
   }
 
   final ImagePicker _picker = ImagePicker();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   void _initializeUser() {
-    final uid = ref.read(authDetailProvider).currentUser?.uid;
-    state = state.copyWith(uid: uid);
+  final currentUser = _auth.currentUser; 
+  if (currentUser != null) {
+    state = state.copyWith(uid: currentUser.uid);
+  } else {
+    state = state.copyWith(uid: null);
   }
+}
+
 
   Future<void> pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
@@ -86,6 +92,7 @@ final postFormProvider = StateNotifierProvider<PostFormNotifier, PostFormState>(
 });
 
 final postListProvider = StreamProvider.family<List<Display>, String>((ref, uid) {
+  print("UID: $uid");
   return FirebaseDatabase.instance
       .ref('posts')  
       .orderByChild('id')  
