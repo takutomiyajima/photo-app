@@ -85,12 +85,15 @@ class LoginPageDetail extends ConsumerWidget {
               onPressed: () async {
                 try {
                   await ref.read(authProvider.notifier).signIn(email, password);
-                  final user = ref.read(authProvider); 
+                  final user = ref.read(authProvider);
+                  
                   if (user != null) {
-                    print("ログイン成功: ${user.uid}");//デバッグ用
+                    print("ログイン成功: ${user.uid}"); // デバッグ用
+                    ref.invalidate(userinfoProvider);
+                    GoRouter.of(context).go('/home');
                   }
                 } catch (e) {
-                  print("ログインに失敗しました: $e");//デバッグ用
+                  print("ログインに失敗しました: $e"); // デバッグ用
                 }
               },
             )

@@ -119,7 +119,10 @@ class PostScreen extends ConsumerWidget {
                     ),
                     SizedBox(height: 20),
                     ElevatedButton(
-                      onPressed: () => _submitData(ref, context),
+                      onPressed: () {
+                        FocusScope.of(context).unfocus(); 
+                        _submitData(ref, context); 
+                      },
                       child: Text('送信'),
                     ),
                     ElevatedButton(onPressed: checkLoginStatus, child: Text("data"))

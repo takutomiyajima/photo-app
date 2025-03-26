@@ -80,12 +80,10 @@ class Setting extends ConsumerWidget {
                   ],
                 ),
               ),
-              // プロフィール画像変更ボタン
               ElevatedButton(
                 onPressed: () => _pickAndUploadImage(context, ref),
                 child: const Text("プロフィール画像を変更"),
               ),
-              // ログアウトボタン
               ElevatedButton(
                 onPressed: () async {
                   await ref.read(authProvider.notifier).signOut();
@@ -94,41 +92,45 @@ class Setting extends ConsumerWidget {
               ),
               const SizedBox(height: 25),
               const Subtitle("my post"),
-              // 投稿リスト
               userAsync.when(
                 data: (userInfo) {
                   if (userInfo == null) {
                     return const Text("ユーザー情報がありません");
                   }
-
                   final postListAsync = ref.watch(postListProvider(userInfo.uid));
-
                   return postListAsync.when(
                     data: (posts) {
                       return posts.isEmpty
                           ? const Center(child: Text('No posts found'))
-                          : GridView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: posts.length,
-                              itemBuilder: (context, index) {
-                                final post = posts[index];
-                                return Flame(post);
-                              },
-                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 3,
-                                crossAxisSpacing: 2,
-                                mainAxisSpacing: 2,
-                                childAspectRatio: 1.0,
+                          : Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: GridView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: posts.length,
+                                itemBuilder: (context, index) {
+                                  final post = posts[index];
+                                  return Flame(post);
+                                },
+                                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3,
+                                  crossAxisSpacing: 1,
+                                  mainAxisSpacing: 2,
+                                  childAspectRatio: 1.0,
+                                ),
                               ),
                             );
                     },
                     loading: () => const Center(child: CircularProgressIndicator()),
-                    error: (error, stack) => Center(child: Text('Error: $error')),
+                    error: (error, stack) {
+                      print("Post loading error: $error");
+                      print("Stack trace: $stack");
+                      return Center(child: Text('Post loading error: $error'));
+                    }
                   );
                 },
-                loading: () => const CircularProgressIndicator(),
-                error: (error, stack) => Center(child: Text('Error: $error')),
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (error, stack) => Center(child: Text('User loading error: $error')), // ユーザー情報のエラーメッセージ表示
               ),
             ],
           ),
