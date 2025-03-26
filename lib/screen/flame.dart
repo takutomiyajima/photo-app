@@ -16,7 +16,7 @@ class Flame extends ConsumerWidget {
         aspectRatio: 1, 
         child: Container(
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.black, width: 1),
+            border: Border.all(color: Colors.black, width: 0),
           ),
           child: Column(
             children: [

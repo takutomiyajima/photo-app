@@ -62,12 +62,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyCxr3tmKHFCMBmvtlfDMNMv3f2CpDiSRpg',
-    appId: '1:202675725142:ios:8ed399a6dccf6ac3ca2cf7',
+    appId: '1:202675725142:ios:5940d38b670c18bcca2cf7',
     messagingSenderId: '202675725142',
     projectId: 'sharephoto-2024',
     databaseURL: 'https://sharephoto-2024-default-rtdb.firebaseio.com',
     storageBucket: 'sharephoto-2024.appspot.com',
-    iosBundleId: 'com.example.photoapp',
+    iosBundleId: 'com.rikoten.photoapp',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(

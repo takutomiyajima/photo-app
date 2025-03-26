@@ -16,7 +16,7 @@ Future<File?> resizeImage(File imageFile) async {
       print('Error: Image decoding failed.');
       return null;
     }
-    final resizedImage = img.copyResize(image, width: 600); // 幅600pxにリサイズ
+    final resizedImage = img.copyResize(image, width: 600); 
     final resizedBytes = img.encodeJpg(resizedImage);
     final resizedFile = await imageFile.writeAsBytes(resizedBytes);
     return resizedFile;
@@ -65,7 +65,6 @@ class PostFormNotifier extends StateNotifier<PostFormState> {
     if (state.image == null) return null;
 
     try {
-      // 画像をリサイズ
       final resizedImage = await resizeImage(state.image!);
       if (resizedImage == null) {
         print('Image resizing failed');
@@ -75,7 +74,6 @@ class PostFormNotifier extends StateNotifier<PostFormState> {
       final storageRef = FirebaseStorage.instance.ref();
       final imageRef = storageRef.child('images/${DateTime.now().millisecondsSinceEpoch}.jpg');
 
-      // アップロードとURL取得を同時に行う
       await imageRef.putFile(resizedImage);
       final downloadURL = await imageRef.getDownloadURL();
 
@@ -93,24 +91,99 @@ final postFormProvider = StateNotifierProvider<PostFormNotifier, PostFormState>(
 
 final postListProvider = StreamProvider.family<List<Display>, String>((ref, uid) {
   print("UID: $uid");
+
+  try {
+    return FirebaseDatabase.instance
+        .ref('posts')
+        .orderByChild('id')
+        .equalTo(uid)
+        .onValue
+        .map((event) {
+      final snapshot = event.snapshot;
+      if (snapshot.value == null) {
+        return [];
+      }
+      final Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+      final posts = data.entries.map((entry) {
+        final postData = Map<String, dynamic>.from(entry.value);
+        final display = Display(
+          id: entry.key,
+          detail: postData['caption'] ?? '',
+          imageUrl: postData['imageUrl'] ?? '',
+          name: postData['name'] ?? '',
+          timestamp: postData['timestamp'] ?? 0,
+        );
+        return display;
+      }).toList();
+
+      return posts;
+    });
+  } catch (e) {
+    throw Exception("Error fetching posts: $e"); // エラーハンドリング
+  }
+});
+
+class PostNotifier extends StateNotifier<List<Display>> {
+  PostNotifier() : super([]);
+
+  final _firebaseDatabase = FirebaseDatabase.instance.ref();
+
+  Future<void> fetchPosts() async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) return;
+
+    final snapshot = await _firebaseDatabase.child('posts').get();
+    if (snapshot.exists) {
+      final posts = <Display>[];
+      snapshot.children.forEach((childSnapshot) {
+        final post = Display.fromMap(childSnapshot.value as Map<String, dynamic>);
+        
+        if (post.id != userId) {
+          posts.add(post);
+        }
+      });
+      state = posts;
+    }
+  }
+}
+
+final postNotifierProvider = StateNotifierProvider<PostNotifier, List<Display>>(
+  (ref) => PostNotifier(),
+);
+
+final otherListProvider = StreamProvider.family<List<Display>, String>((ref, uid) {
+  print("UID: $uid");
+  
   return FirebaseDatabase.instance
-      .ref('posts')  
-      .orderByChild('id')  
-      .equalTo(uid)  
-      .onValue  
+      .ref('posts')
+      .onValue
       .map((event) {
         final snapshot = event.snapshot;
         if (snapshot.value == null) {
-          return [];  
+          return []; 
         }
-
         final Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
-        final posts = data.entries.map((entry) {
-          final post = PostFormState.fromFirebase(Map<String, dynamic>.from(entry.value));
-          return Display.fromPostFormState(post);
-        }).toList();
-
-        return posts;
+        final posts = data.entries
+            .where((entry) {
+              final postData = Map<String, dynamic>.from(entry.value);
+              return postData['id'] != uid;
+            })
+            .map((entry) {
+              final postData = Map<String, dynamic>.from(entry.value);
+              return Display(
+                id: entry.key,  
+                detail: postData['caption'] ?? '',
+                imageUrl: postData['imageUrl'] ?? '',
+                name: postData['name'] ?? '',
+                timestamp: postData['timestamp'] ?? 0,
+              );
+            })
+            .toList();
+        posts.shuffle();  
+        return posts.take(3).toList(); 
       });
 });
+
+
 
